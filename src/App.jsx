@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ArrowLeft,
   ArrowRight,
@@ -42,6 +42,78 @@ const faq = [
   ['Можно ли заказать образцы перед оптовой закупкой?', 'Да, менеджер поможет подобрать продукты и согласует комплект образцов для тестирования.'],
 ]
 
+const catalogGroups = [
+  ['По основе', ['Акриловые ↗', 'Силиконовые', 'Битумные', 'Гибридные', 'Полиуретановые', 'Силокриловые', 'Силикатные']],
+  ['По назначению', ['Для кровли', 'Для ванной и кухни', 'Для дымохода', 'Для автомобилей', 'Для труб', 'Универсальный']],
+  ['По материалу', ['Для дерева', 'Для металла', 'Для пластика', 'Для стекла', 'Для бетона', 'Для плитки']],
+  ['По цвету', ['Белый', 'Серый', 'Черный', 'Прозрачный']],
+  ['Другое', ['Термостойкий', 'Влагостойкий', 'Для наружных работ', '1 компонентный', '2 компонентный', 'Резьбовой']],
+]
+
+const catalogSections = [
+  'КЛЕЙ KLEIM PRO',
+  'ГЕРМЕТИК KLEIM PRO',
+  'ПЕНА МОНТАЖНАЯ',
+  'ГИБРИДНЫЕ КЛЕИ И ГЕРМЕТИКИ KLEIM PRO',
+  'ГЕРМЕТИКИ ДЛЯ КРОВЛИ ФАСАДОВ И ВОДОСТОКОВ',
+  'СПЕЦ ГЕРМЕТИКИ',
+  'ПИСТОЛЕТ',
+]
+
+function CatalogMenu({ onClose }) {
+  return (
+    <div className="mega-menu" role="dialog" aria-label="Каталог продукции">
+      <aside className="mega-menu__sidebar">
+        <nav>
+          {catalogSections.map((item, index) => <a className={index === 0 ? 'is-active' : ''} href="#products" onClick={onClose} key={item}>{item}</a>)}
+        </nav>
+        <a className="mega-menu__client" href="#partners" onClick={onClose}>Оптовым клиентам <img src={`${A}arrow-up-right.svg`} alt="" /></a>
+      </aside>
+
+      <div className="mega-menu__content">
+        <div className="mega-menu__groups">
+          {catalogGroups.map(([title, items]) => <section key={title}>
+            <h3>{title}</h3>
+            {items.map((item) => <a href="#products" onClick={onClose} key={item}>{item}</a>)}
+          </section>)}
+        </div>
+
+        <div className="mega-menu__side-promos">
+          <a href="#company" onClick={onClose}><img src={`${A}raw-20.png`} alt="" /><b>Производство<br />упаковки</b></a>
+          <a href="#blog" onClick={onClose}><img src={`${A}raw-07.png`} alt="" /><b>Рекламные<br />материалы</b></a>
+        </div>
+
+        <div className="mega-menu__bottom-promos">
+          <a href="#products" onClick={onClose}>
+            <img src={`${A}raw-18.png`} alt="" />
+            <b>Какой герметик<br />выбрать?</b>
+            <span><img src={`${A}arrow-up-right.svg`} alt="" /></span>
+          </a>
+          <a href="#products" onClick={onClose}>
+            <img src={`${A}raw-07.png`} alt="" />
+            <b>Таблица<br />подбора клеев</b>
+            <span><img src={`${A}arrow-up-right.svg`} alt="" /></span>
+          </a>
+        </div>
+
+        <nav className="mega-menu__mobile-links">
+          <a href="#partners" onClick={onClose}>Оптовым клиентам и дилерам</a>
+          <a href="#blog" onClick={onClose}>Блог</a>
+          <a href="#contacts" onClick={onClose}>Контакты</a>
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+function CompanyMenu({ onClose }) {
+  return (
+    <nav className="company-menu" aria-label="О компании">
+      {['Карьера', 'Поставщикам', 'Клуб Амбассадор', 'Благотворительность', 'Документы'].map((item) => <a href="#company" onClick={onClose} key={item}>{item}</a>)}
+    </nav>
+  )
+}
+
 function Button({ children, dark = false, type = 'button', onClick }) {
   return (
     <button className={`button ${dark ? 'button--dark' : ''}`} type={type} onClick={onClick}>
@@ -51,22 +123,22 @@ function Button({ children, dark = false, type = 'button', onClick }) {
   )
 }
 
-function Header({ menuOpen, setMenuOpen }) {
+function Header({ catalogOpen, companyOpen, setCatalogOpen, setCompanyOpen, closeMenus }) {
   return (
     <header className="header">
       <a href="#top" className="logo" aria-label="KLEIM PRO">
         <img src={`${A}logo.svg`} alt="KLEIM PRO" />
       </a>
-      <button className="catalog-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen}>
-        {menuOpen ? <X size={24} /> : <img src={`${A}menu.svg`} alt="" />}
+      <button className="catalog-button" onClick={() => { setCatalogOpen(!catalogOpen); setCompanyOpen(false) }} aria-expanded={catalogOpen} aria-controls="catalog-menu">
+        {catalogOpen ? <X size={24} /> : <img src={`${A}menu.svg`} alt="" />}
         Каталог
       </button>
-      <nav className={`nav ${menuOpen ? 'nav--open' : ''}`}>
-        <a href="#company">О компании <ChevronDown size={16} /></a>
-        <a href="#partners">Оптовым клиентам и дилерам</a>
-        <a href="#products">Наша продукция</a>
-        <a href="#blog">Блог</a>
-        <a href="#contacts">Контакты</a>
+      <nav className="nav">
+        <button className="nav__company" onClick={() => { setCompanyOpen(!companyOpen); setCatalogOpen(false) }} aria-expanded={companyOpen}>О компании <ChevronDown className={companyOpen ? 'is-open' : ''} size={16} /></button>
+        <a href="#partners" onClick={closeMenus}>Оптовым клиентам и дилерам</a>
+        <a href="#products" onClick={closeMenus}>Наша продукция</a>
+        <a href="#blog" onClick={closeMenus}>Блог</a>
+        <a href="#contacts" onClick={closeMenus}>Контакты</a>
       </nav>
       <label className="search">
         <Search size={20} />
@@ -81,6 +153,8 @@ function Header({ menuOpen, setMenuOpen }) {
         <i />
         <a href="#max"><img src={`${A}max.svg`} alt="MAX" /><span>MAX</span></a>
       </div>
+      {catalogOpen && <div id="catalog-menu"><CatalogMenu onClose={closeMenus} /></div>}
+      {companyOpen && <CompanyMenu onClose={closeMenus} />}
     </header>
   )
 }
@@ -102,13 +176,22 @@ function LeadForm({ compact = false }) {
 }
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [catalogOpen, setCatalogOpen] = useState(false)
+  const [companyOpen, setCompanyOpen] = useState(false)
   const [activeFaq, setActiveFaq] = useState(0)
+  const closeMenus = () => { setCatalogOpen(false); setCompanyOpen(false) }
+
+  useEffect(() => {
+    const closeOnEscape = (event) => { if (event.key === 'Escape') closeMenus() }
+    document.addEventListener('keydown', closeOnEscape)
+    return () => document.removeEventListener('keydown', closeOnEscape)
+  }, [])
 
   return (
     <main id="top">
       <section className="hero">
-        <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Header catalogOpen={catalogOpen} companyOpen={companyOpen} setCatalogOpen={setCatalogOpen} setCompanyOpen={setCompanyOpen} closeMenus={closeMenus} />
+        {(catalogOpen || companyOpen) && <button className="menu-backdrop" aria-label="Закрыть меню" onClick={closeMenus} />}
         <div className="hero__shade" />
         <div className="hero__decor" aria-hidden="true" />
         <div className="hero__content">
