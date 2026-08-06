@@ -193,7 +193,6 @@ function App() {
         <Header catalogOpen={catalogOpen} companyOpen={companyOpen} setCatalogOpen={setCatalogOpen} setCompanyOpen={setCompanyOpen} closeMenus={closeMenus} />
         {(catalogOpen || companyOpen) && <button className="menu-backdrop" aria-label="Закрыть меню" onClick={closeMenus} />}
         <div className="hero__shade" />
-        <div className="hero__decor" aria-hidden="true" />
         <div className="hero__content">
           <div className="eyebrow"><span />Более 500 позиций в наличии</div>
           <h1>Производство<br />профессиональных<br />герметиков<br />и клеевых систем</h1>
