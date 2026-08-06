@@ -11,7 +11,7 @@ import {
   X,
 } from 'lucide-react'
 
-const A = '/assets/'
+const A = `${import.meta.env.BASE_URL}assets/`
 
 const partnerCards = [
   { image: 'raw-09.jpg', title: 'Производитель полного цикла', text: 'Собственные заводы, лаборатории, контроль качества.' },
