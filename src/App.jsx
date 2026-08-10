@@ -6,7 +6,6 @@ import {
   ChevronDown,
   MapPin,
   MessageSquare,
-  Play,
   Search,
   X,
 } from 'lucide-react'
@@ -14,11 +13,11 @@ import {
 const A = `${import.meta.env.BASE_URL}assets/`
 
 const partnerCards = [
-  { image: 'raw-09.jpg', title: 'Производитель полного цикла', text: 'Собственные заводы, лаборатории, контроль качества.' },
-  { image: 'raw-08.jpg', title: 'Производство под СТМ', text: 'Выпускаем продукцию под вашей торговой маркой.' },
-  { image: 'raw-20.png', title: 'Постоянное наличие', text: 'Большие складские остатки и стабильные поставки.' },
-  { image: 'partner-full-cycle.png', title: 'Оптовые цены', text: 'Гибкие условия для дилеров и крупных заказчиков.' },
-  { image: 'raw-13.png', title: 'Документы', text: 'Сертификаты, паспорта безопасности, техническая документация.' },
+  { image: 'figma/figma-partner-full-cycle.png', title: 'Производитель полного цикла', text: 'Собственные заводы, лаборатории, контроль качества.' },
+  { image: 'figma/figma-partner-stm.png', title: 'Производство под СТМ', text: 'Выпускаем продукцию под вашей торговой маркой.' },
+  { image: 'figma/figma-partner-stock.png', title: 'Постоянное наличие', text: 'Большие складские остатки и стабильные поставки.' },
+  { image: 'figma/figma-partner-wholesale.png', title: 'Оптовые цены', text: 'Гибкие условия для дилеров и крупных заказчиков.' },
+  { image: 'figma/figma-partner-documents.png', title: 'Документы', text: 'Сертификаты, паспорта безопасности, техническая документация.' },
 ]
 
 const advantages = [
@@ -28,18 +27,19 @@ const advantages = [
 ]
 
 const articles = [
-  ['raw-16.jpg', 'Как устроено производство герметиков полного цикла'],
-  ['raw-10.jpg', 'Контроль качества: от сырья до готовой партии'],
-  ['raw-14.jpg', 'Что важно знать при выборе промышленного герметика'],
-  ['raw-18.png', 'Как подобрать состав под конкретную задачу'],
+  ['figma/figma-product-01.png', 'Как выбрать герметик для фасада: 5 главных правил', 'Разбираем, какой герметик лучше выдержит мороз, УФ-излучение и деформацию. Сравниваем акриловые, силиконовые и гибридные составы и даём чёткие рекомендации для разных типов фасадов.'],
+  ['figma/figma-product-02.png', 'Акриловый герметик A201: полное руководство по применению', 'Подробная инструкция по работе с одним из самых популярных герметиков KLEIM PRO. Подготовка поверхности, оптимальные условия нанесения, время полимеризации и распространённые ошибки.'],
+  ['figma/figma-product-03.png', 'Почему важно использовать профессиональные герметики', 'В чём разница между профессиональной линейкой и товарами из масс-маркета. Срок службы, надёжность шва, экономия на переделках и почему для серьёзных объектов бытовые герметики не подходят.'],
+  ['figma/figma-product-04.png', 'Акриловый герметик A201: полное руководство по применению', 'Подробная инструкция по работе с одним из самых популярных герметиков KLEIM PRO. Подготовка поверхности, оптимальные условия нанесения, время полимеризации и распространённые ошибки.'],
 ]
 
 const faq = [
   ['Для каких работ подходит акриловый герметик A201?', 'Акриловый герметик KLEIM PRO A201 — универсальный морозостойкий состав для внутренних и наружных работ.'],
   ['Можно ли использовать герметики KLEIM PRO при отрицательных температурах?', 'Да, часть линейки рассчитана на зимнее нанесение. Точный температурный диапазон указан в техническом паспорте продукта.'],
-  ['Какой срок годности у продукции?', 'Срок зависит от состава и упаковки. В среднем — от 12 до 18 месяцев при соблюдении условий хранения.'],
-  ['Выпускаете ли вы продукцию под частной торговой маркой?', 'Да. Разрабатываем рецептуру, дизайн упаковки и производим партии под СТМ заказчика.'],
-  ['Можно ли заказать образцы перед оптовой закупкой?', 'Да, менеджер поможет подобрать продукты и согласует комплект образцов для тестирования.'],
+  ['Какой срок годности у герметиков и клеевых систем KLEIM PRO?', 'Срок зависит от состава и упаковки. В среднем — от 12 до 18 месяцев при соблюдении условий хранения.'],
+  ['В чём отличие акриловых герметиков от силиконовых?', 'Акриловые составы можно окрашивать, а силиконовые лучше переносят постоянный контакт с водой и сохраняют высокую эластичность.'],
+  ['Нужно ли грунтовать поверхность перед нанесением герметика?', 'Основание должно быть сухим, чистым и обезжиренным. Для пористых и сильно впитывающих поверхностей грунтование улучшает адгезию.'],
+  ['Как правильно хранить герметики KLEIM PRO?', 'Храните закрытую упаковку в сухом помещении и соблюдайте температурный диапазон, указанный на этикетке продукта.'],
 ]
 
 const catalogGroups = [
@@ -79,20 +79,16 @@ function CatalogMenu({ onClose }) {
         </div>
 
         <div className="mega-menu__side-promos">
-          <a href="#company" onClick={onClose}><img src={`${A}raw-20.png`} alt="" /><b>Производство<br />упаковки</b></a>
-          <a href="#blog" onClick={onClose}><img src={`${A}raw-07.png`} alt="" /><b>Рекламные<br />материалы</b></a>
+          <a href="#company" onClick={onClose}><img src={`${A}figma/figma-menu-production.png`} alt="Производство упаковки" /></a>
+          <a href="#blog" onClick={onClose}><img src={`${A}figma/figma-menu-materials.png`} alt="Рекламные материалы" /></a>
         </div>
 
         <div className="mega-menu__bottom-promos">
           <a href="#products" onClick={onClose}>
-            <img src={`${A}raw-18.png`} alt="" />
-            <b>Какой герметик<br />выбрать?</b>
-            <span><img src={`${A}arrow-up-right.svg`} alt="" /></span>
+            <img src={`${A}figma/figma-menu-sealant-guide.png`} alt="Какой герметик выбрать?" />
           </a>
           <a href="#products" onClick={onClose}>
-            <img src={`${A}raw-07.png`} alt="" />
-            <b>Таблица<br />подбора клеев</b>
-            <span><img src={`${A}arrow-up-right.svg`} alt="" /></span>
+            <img src={`${A}figma/figma-menu-glue-table.png`} alt="Таблица подбора клеев" />
           </a>
         </div>
 
@@ -159,7 +155,7 @@ function Header({ catalogOpen, companyOpen, setCatalogOpen, setCompanyOpen, clos
   )
 }
 
-function LeadForm({ compact = false }) {
+function LeadForm({ compact = false, decorated = false }) {
   const [sent, setSent] = useState(false)
   return (
     <form className={`lead-form ${compact ? 'lead-form--compact' : ''}`} onSubmit={(event) => { event.preventDefault(); setSent(true) }}>
@@ -171,6 +167,7 @@ function LeadForm({ compact = false }) {
       <label className="consent"><span><Check size={16} /></span>Согласие на обработку персональных данных</label>
       <a className="privacy" href="#privacy">Политика конфиденциальности</a>
       <button className="button form-button" type="submit">{sent ? 'Заявка отправлена' : compact ? 'Получить лучшие условия' : 'Отправить заявку'}</button>
+      {decorated && <img className="lead-form__decoration" src={`${A}figma/figma-faq-decoration.png`} alt="" />}
     </form>
   )
 }
@@ -190,6 +187,7 @@ function App() {
   return (
     <main id="top">
       <section className="hero">
+        <img className="hero__background" src={`${A}figma/figma-hero.png`} alt="" />
         <Header catalogOpen={catalogOpen} companyOpen={companyOpen} setCatalogOpen={setCatalogOpen} setCompanyOpen={setCompanyOpen} closeMenus={closeMenus} />
         {(catalogOpen || companyOpen) && <button className="menu-backdrop" aria-label="Закрыть меню" onClick={closeMenus} />}
         <div className="hero__shade" />
@@ -199,12 +197,11 @@ function App() {
           <p>Надежный производитель строительной химии для бизнеса. Обеспечиваем строительные компании, дилеров, торговые сети и производственные предприятия профессиональными герметиками и клеевыми системами с гарантией стабильного качества и поставок.</p>
           <Button>Оптовым клиентам и дилерам</Button>
         </div>
-        <button className="play" aria-label="Смотреть видео"><Play size={42} /></button>
       </section>
 
       <section className="section company" id="company">
         <div className="company__image">
-          <img src={`${A}raw-16.jpg`} alt="Производственный комплекс KLEIM PRO" />
+          <img src={`${A}figma/figma-company-production.png`} alt="Производственный комплекс KLEIM PRO" />
           <div className="company__arrows" aria-label="Фотографии производства">
             <button aria-label="Предыдущее фото"><ArrowLeft /></button>
             <button aria-label="Следующее фото"><ArrowRight /></button>
@@ -233,6 +230,7 @@ function App() {
 
       <section className="section production">
         <div className="production__inner">
+          <img className="production__background" src={`${A}figma/figma-production-capabilities.png`} alt="" />
           <div className="production__intro">
             <h2>Производственные возможности</h2>
             <p>Мы не просто выпускаем строительную химию, а предлагаем комплексные производственные решения для бизнеса.</p>
@@ -253,12 +251,11 @@ function App() {
       <section className="section stores">
         <div className="retailers">
           <h2>Где нас купить</h2>
-          {['Лемана ПРО', 'Петрович', 'Лемана ПРО', 'Лемана ПРО', 'Все инструменты', 'Максидом'].map((name, index) => <span className={`retailer retailer--${index + 1}`} key={`${name}-${index}`}>{name}</span>)}
+          {[1, 2, 3, 4, 5, 6].map((index) => <span className="retailer" key={index}><img src={`${A}figma/figma-retailer-0${index}.png`} alt="Магазин-партнёр" /></span>)}
           <button>Все магазины <ArrowRight size={18} /></button>
         </div>
         <div className="map-visual">
-          <img className="map-export" src={`${A}map-section.png`} alt="География продаж KLEIM PRO" />
-          <img className="map-mobile" src={`${A}raw-05.png`} alt="Карта городов продаж" />
+          <img className="map-export" src={`${A}figma/figma-stores-composite.png`} alt="География продаж KLEIM PRO" />
         </div>
       </section>
 
@@ -268,16 +265,16 @@ function App() {
           <div className="benefits__copy">
             {advantages.map(([title, text], index) => <article key={title}><span>0{index + 1}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
           </div>
-          <div className="benefits__photo"><img src={`${A}raw-17.jpg`} alt="Завод KLEIM PRO" /><div><strong>10 млн+</strong><span>единиц продукции в год</span></div></div>
+          <div className="benefits__photo"><img src={`${A}figma/figma-benefits-media.png`} alt="Завод KLEIM PRO" /></div>
         </div>
       </section>
 
       <section className="section blog" id="blog">
-        <div className="section-heading"><h2>Наш блог</h2><a href="#all">Читать все <ArrowRight size={18} /></a></div>
+        <div className="section-heading"><h2>Наш блог</h2><a href="#all">Смотреть все <ArrowRight size={18} /></a></div>
         <div className="article-grid">
-          {articles.map(([image, title], index) => <article key={title}>
+          {articles.map(([image, title, description], index) => <article key={`${image}-${index}`}>
             <img src={`${A}${image}`} alt="" />
-            <div><span>0{index + 1}.08.2026</span><h3>{title}</h3><a href="#read">Читать статью <ArrowRight size={16} /></a></div>
+            <div><h3>{title}</h3><p>{description}</p><span>02.07.2026</span></div>
           </article>)}
         </div>
       </section>
@@ -291,12 +288,12 @@ function App() {
               <div><p>{answer}</p></div>
             </article>)}
           </div>
-          <LeadForm />
+          <LeadForm decorated />
         </div>
       </section>
 
       <section className="section contacts" id="contacts">
-        <div className="contacts__map"><img src={`${A}raw-06.png`} alt="Карта офиса KLEIM PRO" /></div>
+        <div className="contacts__map"><img src={`${A}figma/figma-contacts-map.png`} alt="Карта офиса KLEIM PRO" /></div>
         <div className="contact-card">
           <h2>Контакты</h2>
           <a href="tel:+78000000000">8 (800) 000-00-00</a>
@@ -307,11 +304,12 @@ function App() {
       </section>
 
       <footer className="footer">
+        <img className="footer__background" src={`${A}figma/figma-footer-background.png`} alt="" />
         <div className="footer__top section">
           <nav><a href="#products">Каталог</a><a href="#partners">Оптовым клиентам и дилерам</a><a href="#company">О компании</a><a href="#products">Наша продукция</a><a href="#stores">Где нас купить</a><a href="#blog">Блог</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a></nav>
           <div className="footer__contacts"><img src={`${A}logo.svg`} alt="KLEIM PRO" /><a href="tel:+78000000000">8 (800) 000-00-00</a><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a></div>
         </div>
-        <div className="footer__visual"><img src={`${A}raw-07.png`} alt="Продукция KLEIM PRO" /></div>
+        <div className="footer__visual"><img src={`${A}figma/figma-footer-product.png`} alt="Продукция KLEIM PRO" /></div>
         <div className="footer__bottom section"><span>Copyright © 2026</span><a href="#rules">Правила обработки персональных данных</a><a href="#privacy">Политика конфиденциальности</a></div>
       </footer>
 
