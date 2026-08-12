@@ -1,47 +1,46 @@
-# Design QA — главная KLEIM PRO
+# Design QA — KLEIM PRO
 
-- Source visual truth: Figma file `UZ8rengEDLAe1cOi05sm6o`, homepage node `286:905`, `1920 × 12026`.
-- Implementation: `http://localhost:5173/`.
-- Canonical Figma render: `audit/pixel-perfect-2026-08-10/figma-homepage-1920.png`.
-- Final desktop implementation: `audit/pixel-perfect-2026-08-10/local-final-1920.png`.
-- Section-by-section source/implementation comparison: `audit/pixel-perfect-2026-08-10/comparison-section-strips-1920.png`.
-- Checked viewports: `1920 × 1080`, `877 × 777`, `390 × 844` CSS px.
+## Reference
+
+- Figma file: `UZ8rengEDLAe1cOi05sm6o`, page `286:904`
+- Reference frames reviewed: homepage `286:905`, categories `437:1073`, catalog `454:1613`, product `454:2925`, about `470:1489`, wholesale `538:1860`, advertising `547:1241`, packaging `555:1493`, selector `582:2452`, career/company subpages `534:3325`–`534:3586`, documents `559:3003`, blog `582:3083`, article `582:3458`, contacts `582:3795`.
+- Exact Figma source assets were exported for the implemented routes. Full-frame references used during comparison are in `public/assets/figma-reference/`.
+
+## Implemented routes
+
+- `#/`
+- `#/catalog`
+- `#/catalog/glue`
+- `#/product/pva-d3`
+- `#/about`
+- `#/wholesale`
+- `#/advertising`
+- `#/packaging`
+- `#/selector`
+- `#/career`
+- `#/suppliers`
+- `#/ambassadors`
+- `#/charity`
+- `#/documents`
+- `#/blog`
+- `#/blog/article`
+- `#/contacts`
 
 ## Visual comparison
 
-The final comparison places the Figma reference on the left and the implementation on the right at the same `1920 px` viewport. Each row uses the same scroll coordinate and a `1080 px`-high crop. The page grid, section starts, image crops, card geometry, typography hierarchy, radii, and spacing were reviewed together rather than as isolated screenshots.
+Compared source frames and live implementation at desktop (1440 × 900) and mobile (390 × 844). Checked the same top-of-page state, typography, spacing, card radii, asset crop, navigation hierarchy, responsive stacking and overflow.
 
-Desktop section geometry matches the Figma frame:
+## Functional checks
 
-- hero: `top 0`, `height 1026`;
-- company: `top 1026`, `height 1090`;
-- partners: `top 2116`, `height 1332`;
-- production: `top 3448`, `height 669`;
-- products: `top 4297`, `height 980`;
-- stores: `top 5277`, `height 2043`;
-- benefits: `top 7320`, `height 1147`;
-- blog: `top 8467`, `height 875`;
-- FAQ: `top 9342`, `height 977`;
-- contacts: `top 10319`, `height 683`;
-- footer: `top 11082`, `height 944`.
+- Every route renders exactly one primary heading.
+- All 17 routes render content and remain free of horizontal overflow at 390 px.
+- Catalog mega-menu opens, matches the Figma hierarchy and links to the catalog route.
+- Company dropdown routes to five implemented company pages.
+- Category → listing → product navigation works.
+- Filters, selector choices, color choices, accordion/menu state and lead form acknowledgement work.
+- No browser console errors found.
+- Production build passes.
 
-## Findings and fixes
+## Final result
 
-- No actionable P0, P1, or P2 visual issues remain.
-- Exact Figma exports are used for the hero, company, all partner cards, production block, retailer cards, sales map, benefits, blog, FAQ decoration, contacts, footer, and catalog-menu promos.
-- Supplied Bounded and Raleway font files are bundled through Vite and load correctly with the GitHub Pages base path.
-- Blog copy, six FAQ rows, buttons, form treatments, and footer blueprint were aligned with the canonical desktop frame.
-- The gray hero video circle is intentionally omitted at the user's explicit request.
-
-## Responsive and interaction checks
-
-- `877 × 777`: no document-level horizontal overflow; hero, header, company grid, card stacks, and typography remain inside the viewport.
-- `390 × 844`: document `scrollWidth` equals `390`; horizontal overflow exists only inside the intentionally scrollable partner/product/blog carousels. The production heading was reduced and reflowed to a `350 px` content width.
-- Catalog mega menu opens and reports `aria-expanded="true"`; Escape closes it.
-- Company submenu is mutually exclusive with the catalog menu.
-- FAQ items expand and update `aria-expanded`.
-- Lead form accepts input and reaches the local `Заявка отправлена` state.
-- Latest browser session produced no new console errors or warnings.
-- `npm run build`: passed.
-
-final result: passed
+passed
