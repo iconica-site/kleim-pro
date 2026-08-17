@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft, ArrowRight, Check, ChevronDown, Download, FileText,
   Filter, MapPin, MessageSquare, Search, X,
@@ -30,10 +30,10 @@ const catalogSections = [
 ]
 
 const categories = [
-  ['Клей', 'category-1.png'], ['Герметики', 'category-2.png'],
-  ['Спец герметики', 'category-3.png'], ['Гибридные клеи и герметики', 'category-4.png'],
-  ['Герметики для кровли, фасадов и водостоков', 'figma/figma-category-product.png'],
-  ['Пена монтажная', 'figma/figma-product-05.png'],
+  ['Клей', 'category-1.png', true], ['Герметики', 'category-2.png', true],
+  ['Спец герметики', 'category-3.png', true], ['Гибридные клеи и герметики', 'category-4.png', true],
+  ['Герметики для кровли, фасадов и водостоков', 'pages/catalog/2.png', false],
+  ['Пена монтажная', 'figma/figma-category-product.png', false],
 ]
 
 const products = [
@@ -136,9 +136,10 @@ function PageIntro({ title, parent, kicker, children }) {
   return <section className="page-intro section"><Breadcrumbs items={[parent, title].filter(Boolean)} /><h1>{title}</h1>{kicker && <p className="page-intro__kicker">{kicker}</p>}{children}</section>
 }
 
-function LeadForm({ title = 'Остались вопросы?', text = 'Оставьте заявку — мы свяжемся с вами в ближайшее время', compact = false }) {
+function LeadForm({ title = 'Остались вопросы?', text = 'Оставьте заявку — мы свяжемся с вами в ближайшее время', compact = false, decoration = false }) {
   const [sent, setSent] = useState(false)
-  return <form className={`lead-form ${compact ? 'lead-form--compact' : ''}`} style={{ '--faq-decoration': `url(${A}figma/figma-faq-decoration.png)` }} onSubmit={e => { e.preventDefault(); setSent(true) }}>
+  return <form className={`lead-form ${compact ? 'lead-form--compact' : ''}`} onSubmit={e => { e.preventDefault(); setSent(true) }}>
+    {decoration && <div className="lead-form__media"><img src={`${A}faq-products-cutout.png`} alt="Герметики KLEIM PRO" /></div>}
     <h3>{title}</h3><p>{text}</p><input placeholder="ФИО" required /><input type="tel" placeholder="Телефон" required /><textarea placeholder="Ваш вопрос" rows="3" />
     <label className="consent"><span><Check size={16} /></span>Согласие на обработку персональных данных</label><a className="privacy" href="#privacy">Политика конфиденциальности</a>
     <button className="button form-button" type="submit">{sent ? 'Заявка отправлена' : 'Отправить заявку'}</button>
@@ -150,32 +151,123 @@ function ContactSection() {
 }
 
 function Footer() {
-  return <footer className="footer"><img className="footer__background" src={`${A}figma/figma-footer-background.png`} alt="" /><div className="footer__top section"><nav><Link to="/catalog">Каталог</Link><Link to="/wholesale">Оптовым клиентам и дилерам</Link><Link to="/about">О компании</Link><Link to="/catalog">Наша продукция</Link><Link to="/about">Где нас купить</Link><Link to="/blog">Блог</Link><Link to="/contacts">Контакты</Link></nav><div className="footer__contacts"><img src={`${A}logo.svg`} alt="KLEIM PRO" /><a href="tel:+78000000000">8 (800) 000-00-00</a><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a></div></div><div className="footer__visual"><img src={`${A}figma/figma-footer-product.png`} alt="Продукция KLEIM PRO" /></div><div className="footer__bottom section"><span>Copyright © 2026</span><a href="#rules">Правила обработки персональных данных</a><a href="#privacy">Политика конфиденциальности</a></div></footer>
+  return <footer className="footer"><img className="footer__background" src={`${A}figma/figma-footer-background.png`} alt="" /><div className="footer__top section"><nav><Link className="footer__catalog" to="/catalog">Каталог <span>⌘</span></Link><Link to="/wholesale">Оптовым клиентам и дилерам</Link><Link to="/about">О компании</Link><Link to="/catalog">Наша продукция</Link><a href="#stores">Где нас купить</a><a href="#benefits">Преимущества</a><Link to="/blog">Блог</Link><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a></nav><div className="footer__contacts"><img src={`${A}logo.svg`} alt="KLEIM PRO" /><a href="tel:+78000000000">8 (800) 000-00-00</a><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a><div className="messengers messengers--footer"><a href="https://t.me"><img src={`${A}telegram.svg`} alt="" />TG</a><i /><a href="https://max.ru"><img src={`${A}max.svg`} alt="" />MAX</a></div></div></div><div className="footer__visual"><img src={`${A}figma/figma-footer-product.png`} alt="Продукция KLEIM PRO" /></div><div className="footer__bottom section"><span>Copyright © 2026</span><a href="#rules">Правила обработки персональных данных</a><a href="#privacy">Политика конфиденциальности</a></div></footer>
 }
 
-function Shell({ children, noContacts = false, noFooter = false }) {
-  return <main id="top" className="page"><Header />{children}{!noContacts && <ContactSection />}{!noFooter && <Footer />}<button className="chat" aria-label="Написать нам"><MessageSquare fill="currentColor" /></button></main>
+function Shell({ children, noContacts = false, noFooter = false, className = '' }) {
+  return <main id="top" className={`page ${className}`}><Header />{children}{!noContacts && <ContactSection />}{!noFooter && <Footer />}<button className="chat" aria-label="Написать нам"><MessageSquare fill="currentColor" /></button></main>
 }
 
 function ProductCard({ index = 0 }) {
   return <Link className="catalog-card" to="/product/pva-d3"><div className="catalog-card__image"><img src={`${A}pages/catalog/2.png`} alt="" /><span>{index % 3 === 0 ? 'Хит' : 'Новинка'}</span></div><div className="catalog-card__copy"><h3>{products[index % products.length]}</h3><p>Профессиональный состав для прочного и долговечного соединения.</p><b>Подробнее <ArrowRight size={16} /></b></div></Link>
 }
 
+const companySlides = [
+  ['figma/figma-company-production.png', 'Производственный комплекс KLEIM PRO'],
+  ['raw-08.jpg', 'Современные производственные линии'],
+  ['raw-09.jpg', 'Контроль качества продукции'],
+]
+
+function CompanySection() {
+  const [slide, setSlide] = useState(0)
+  const move = direction => setSlide(current => (current + direction + companySlides.length) % companySlides.length)
+  return <section className="section company">
+    <div className="company__image">
+      {companySlides.map(([src, alt], index) => <img className={index === slide ? 'is-active' : ''} src={`${A}${src}`} alt={alt} key={src} />)}
+      <div className="company__arrows"><button onClick={() => move(-1)} aria-label="Предыдущий слайд"><ArrowLeft /></button><button onClick={() => move(1)} aria-label="Следующий слайд"><ArrowRight /></button></div>
+    </div>
+    <div className="company__copy"><h2>Собственные производственные мощности</h2><p>и передовые лаборатории, которые позволяют контролировать каждый этап создания продукции</p><div className="stats"><article><strong>2</strong><b>завода</b><span>Производят около 90% строительной химии.</span></article><article><strong>3</strong><b>лаборатории</b><span>Разрабатывают продукты и контролируют качество.</span></article></div></div>
+  </section>
+}
+
+function Video({ src, poster, label, autoPlay = false }) {
+  const ref = useRef(null)
+  const [playing, setPlaying] = useState(false)
+  const toggle = () => {
+    const video = ref.current
+    if (!video) return
+    video.muted = true
+    if (video.paused) video.play(); else video.pause()
+  }
+  return <div className={`video-frame ${playing ? 'is-playing' : ''} ${autoPlay ? 'video-frame--ambient' : ''}`} onClick={autoPlay ? undefined : toggle}>
+    <video ref={ref} src={src} poster={poster} muted playsInline loop autoPlay={autoPlay} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
+    {!autoPlay && <button className="video-play" type="button" aria-label={playing ? 'Поставить видео на паузу' : `Включить видео: ${label}`}><img src={`${A}play-button.svg`} alt="" /></button>}
+  </div>
+}
+
+function ProductionSection() {
+  return <section className="section production"><div className="production__inner">
+    <Video autoPlay src={`${A}production-capabilities.mp4`} poster={`${A}figma/figma-production-capabilities.png`} label="Производственные возможности" />
+    <div className="production__intro"><h2>Производственные возможности</h2><p>Мы не просто выпускаем строительную химию, а предлагаем комплексные производственные решения для бизнеса.</p><Button>Оптовым клиентам</Button></div>
+    <article className="glass-card"><b>Гибкие объёмы</b><p>Выпускаем как небольшие партии для запуска новых проектов, так и крупные объёмы для федеральных сетей, дилеров и промышленных предприятий.</p></article>
+    <article className="glass-card glass-card--two"><b>Разработка и СТМ</b><p>Разрабатываем новые продукты, производим продукцию под собственной и частной торговой маркой.</p></article>
+  </div></section>
+}
+
+const retailerImages = ['figma-retailer-01.png','figma-retailer-02.png','figma-retailer-03.png','figma-retailer-04.png','figma-retailer-05.png','figma-retailer-06.png']
+function StoresSection() {
+  return <section className="section stores" id="stores"><div className="retailers"><h2>Где нас<br />купить</h2>{retailerImages.map(name => <a className="retailer" href="#contacts" key={name}><img src={`${A}figma/${name}`} alt="Магазин-партнёр" /></a>)}<button>Смотреть все <ArrowRight size={18} /></button></div>
+    <div className="map-visual"><img className="map-export" src={`${A}map.png`} alt="Карта присутствия KLEIM PRO" /><div className="map-stat map-stat--production"><strong>10 млн+</strong><span>Единиц<br />продукции в год</span></div><div className="map-stat map-stat--shops"><strong>5 700 +</strong><span>магазинов</span></div><div className="map-stat map-stat--regions"><strong>85</strong><span>Регионов</span></div><div className="map-stat map-stat--cities"><strong>300+</strong><span>Городов</span></div></div>
+  </section>
+}
+
+function BenefitsSection() {
+  return <section className="section benefits" id="benefits"><h2>Ключевые преимущества</h2><div className="benefits__layout"><div className="benefits__copy">
+    <article><span>01</span><div><h3>Разнообразный ассортимент</h3><p>Для большого числа задач: под разные основы и материалы, под широкий диапазон климатических условий и, конечно же, большая палитра цветовых решений.</p></div></article>
+    <article><span>02</span><div><h3>Доверие покупателей</h3><p>Обеспечивается нашими главными свойствами — стабильность, качество и объективная ценовая политика.</p></div></article>
+    <article><span>03</span><div><h3>20 лет</h3><p>Производим высококачественную продукцию.</p></div></article>
+  </div><div className="benefits__photo"><Video src={`${A}key-benefits.mp4`} poster={`${A}figma/figma-benefits-media.png`} label="Ключевые преимущества" /></div></div></section>
+}
+
+function BlogSection() {
+  const ref = useRef(null)
+  const images = ['raw-08.jpg', 'raw-09.jpg', 'raw-10.jpg', 'raw-17.jpg']
+  const slides = articles.concat(articles)
+  const scroll = direction => ref.current?.scrollBy({ left: direction * Math.min(ref.current.clientWidth, 620), behavior: 'smooth' })
+  return <section className="section blog"><div className="section-heading"><h2>Наш блог</h2><Link to="/blog">Смотреть все <ArrowRight size={18} /></Link></div><div className="article-grid" ref={ref}>{slides.map(([title,text], index) => <article key={`${title}-${index}`}><img src={`${A}${images[index % images.length]}`} alt="" /><div><h3>{title}</h3><p>{text}</p><span>02.07.2026</span></div></article>)}</div><div className="blog__arrows slider-buttons"><button onClick={() => scroll(-1)} aria-label="Назад"><ArrowLeft /></button><button onClick={() => scroll(1)} aria-label="Вперёд"><ArrowRight /></button></div></section>
+}
+
+const faqItems = [
+  ['Для каких работ подходит акриловый герметик A201?', 'Акриловый герметик KLEIM PRO A201 — это универсальный морозостойкий герметик для внутренних и наружных работ.'],
+  ['Можно ли использовать герметики KLEIM PRO при отрицательных температурах?', 'Да, отдельные составы рассчитаны на применение при отрицательных температурах. Условия указаны на упаковке продукта.'],
+  ['Какой срок годности у герметиков и клеевых систем KLEIM PRO?', 'Срок годности зависит от продукта и указывается на упаковке. Храните продукцию в рекомендованных условиях.'],
+  ['В чём отличие акриловых герметиков от силиконовых?', 'Акриловые составы можно окрашивать, а силиконовые лучше подходят для зон с постоянной влажностью.'],
+  ['Нужно ли грунтовать поверхность перед нанесением герметика?', 'Пористые и сильно впитывающие поверхности рекомендуется предварительно подготовить.'],
+  ['Как правильно хранить герметики KLEIM PRO?', 'В сухом помещении, вдали от прямого солнца и в температурном диапазоне, указанном на упаковке.'],
+]
+function FaqSection() {
+  const [open, setOpen] = useState(0)
+  return <section className="section faq" id="faq"><h2>Часто задаваемые вопросы</h2><div className="faq__layout"><div className="accordions">{faqItems.map(([question,answer], index) => <article className={open === index ? 'is-open' : ''} key={question}><button onClick={() => setOpen(open === index ? -1 : index)} aria-expanded={open === index}>{question}<i /></button><div><p>{answer}</p></div></article>)}</div><LeadForm decoration title="Остались вопросы?" text="Оставьте заявку — мы свяжемся с вами в ближайшее время" /></div></section>
+}
+
 function Home() {
   return <main id="top"><section className="hero"><img className="hero__background" src={`${A}figma/figma-hero.png`} alt="" /><Header overlay /><div className="hero__shade" /><div className="hero__content"><div className="eyebrow"><span />Более 500 позиций в наличии</div><h1>Производство<br />профессиональных<br />герметиков<br />и клеевых систем</h1><p>Надежный производитель строительной химии для бизнеса. Стабильное качество, собственное производство и поставки по всей России.</p><Button>Оптовым клиентам и дилерам</Button></div></section>
-    <section className="section company"><div className="company__image"><img src={`${A}figma/figma-company-production.png`} alt="Производственный комплекс" /><div className="company__arrows"><button><ArrowLeft /></button><button><ArrowRight /></button></div></div><div className="company__copy"><h2>Собственные производственные мощности</h2><p>и передовые лаборатории, которые позволяют контролировать каждый этап создания продукции</p><div className="stats"><article><strong>2</strong><b>завода</b><span>Производят около 90% строительной химии.</span></article><article><strong>3</strong><b>лаборатории</b><span>Разрабатывают продукты и контролируют качество.</span></article></div></div></section>
+    <CompanySection />
     <section className="section partners"><h2>Лучшие условия для партнёров</h2><div className="partner-grid">{[['figma-partner-full-cycle.png','Производитель полного цикла'],['figma-partner-stm.png','Производство под СТМ'],['figma-partner-stock.png','Постоянное наличие'],['figma-partner-wholesale.png','Оптовые цены'],['figma-partner-documents.png','Документы']].map(([img,title])=><Link className="partner-card" to="/wholesale" key={title}><img src={`${A}figma/${img}`} alt=""/><div><h3>{title}</h3><p>Собственные заводы, лаборатории и стабильные поставки.</p></div></Link>)}<LeadForm compact title="Лучшие условия" text="Оставьте заявку и мы предложим лучшие цены." /></div></section>
+    <ProductionSection />
     <section className="section products"><div className="section-heading"><h2>Наша продукция</h2><Link to="/catalog">Смотреть все <ArrowRight size={18}/></Link></div><div className="product-grid">{[1,2,3,4].map(i=><Link to="/catalog" key={i}><img src={`${A}category-${i}.png`} alt="Категория продукции"/></Link>)}</div></section>
+    <StoresSection /><BenefitsSection /><BlogSection /><FaqSection />
     <ContactSection /><Footer /><button className="chat"><MessageSquare fill="currentColor" /></button></main>
 }
 
 function CategoriesPage() {
-  return <Shell><PageIntro title="Все товары" /><section className="section category-list">{categories.map(([title,img],i)=><Link className="category-tile" to="/catalog/glue" key={title}><span>0{i+1}</span><h2>{title}</h2><img src={`${A}${img}`} alt=""/><i><ArrowRight /></i></Link>)}</section></Shell>
+  return <Shell className="categories-page"><PageIntro title="Все товары" /><section className="section category-list">{categories.map(([title,img,complete])=><Link className={`category-tile ${complete ? 'category-tile--complete' : ''}`} to="/catalog/glue" key={title}>{!complete && <h2>{title}</h2>}<img src={`${A}${img}`} alt={title}/></Link>)}</section></Shell>
+}
+
+const catalogFilterGroups = [
+  ['Назначение', ['Монтажный', 'Универсальный', 'Кровельный']],
+  ['Основа', ['Акриловый', 'Битумный', 'Гибридный', 'Каучуковый', 'Полиуретановый', 'Цианоакрилатный', 'Эпоксидный']],
+  ['Цвет', ['Прозрачный', 'Белый', 'Бежевый', 'Черный']],
+]
+
+function CatalogProductCard({ index }) {
+  const colors = index % 3 === 0 ? ['#fff'] : index % 3 === 1 ? ['#fff','#f3f3f3','#ffd8ba','#282828'] : ['#ffd8ba']
+  return <Link className="catalog-product" to="/product/pva-d3"><div className="catalog-product__image"><img src={`${A}pages/catalog/2.png`} alt="Двухкомпонентный быстрый клей-спрей-активатор" /></div><div className="catalog-product__body"><h3>Двухкомпонентный быстрый<br />клей-спрей-активатор</h3><div className="catalog-product__sizes"><span>200 мл + 50 гр</span>{index % 3 !== 1 && <span>400 мл + 100 гр</span>}</div><div className="catalog-product__bottom"><div className="catalog-product__colors">{colors.map((color,i)=><i style={{background:color}} key={`${color}-${i}`} />)}</div>{index === 0 && <b><ArrowRight size={22}/></b>}</div></div></Link>
 }
 
 function CatalogPage() {
   const [filtersOpen,setFiltersOpen]=useState(false)
-  return <Shell><PageIntro title="Клей" parent="Каталог" /><section className="section catalog-layout"><button className="filter-mobile" onClick={()=>setFiltersOpen(!filtersOpen)}><Filter size={18}/> Фильтры</button><aside className={`filters ${filtersOpen?'is-open':''}`}><h3>Фильтры</h3>{['Назначение','Основа','Материал','Цвет','Объём'].map((f,i)=><details open={i<2} key={f}><summary>{f}<ChevronDown size={16}/></summary>{['Для дерева','Для металла','Универсальный','Для наружных работ'].map(v=><label key={v}><input type="checkbox"/> {v}</label>)}</details>)}<button className="button">Показать товары</button></aside><div><div className="filter-chips"><button>Все товары</button><button>Для дерева</button><button>Для металла</button><button>Белый</button></div><div className="catalog-grid">{products.map((_,i)=><ProductCard index={i} key={i}/>)}</div><nav className="pagination"><button>1</button><button>2</button><button>3</button><span>…</span><button>20</button><button>Вперёд <ArrowRight size={16}/></button></nav></div></section></Shell>
+  return <Shell className="catalog-page"><section className="section catalog-head"><h1>Клей</h1><div className="catalog-head__row"><nav>{['Клей','Герметики','Спец герметики','Гибридные клеи и герметики','Герметики для кровли фасадов и водостоков','Пена монтажная'].map((item,i)=><button className={i===0?'is-active':''} key={item}>{item}</button>)}</nav><Link to="/selector">Подобрать герметик <ArrowRight size={16}/></Link></div></section><section className="section catalog-layout"><button className="filter-mobile" onClick={()=>setFiltersOpen(!filtersOpen)}><Filter size={18}/> Фильтр</button><aside className={`filters ${filtersOpen?'is-open':''}`}><h3><Filter size={17}/> Фильтр</h3>{catalogFilterGroups.map(([title,values],groupIndex)=><div className="filter-group" key={title}><h4>{title}</h4>{values.map((value,index)=><label key={value}><input type="checkbox" defaultChecked={index===0 && groupIndex!==1}/><span />{value}</label>)}</div>)}<div className="filter-group filter-tags"><h4>Компоненты</h4><button className="is-active">Двухкомпонентный</button><button>Однокомпонентный</button></div><div className="filter-group filter-tags"><h4>Серия</h4>{['Серия 1','Серия 2','Серия 23','Серия 333'].map((item,i)=><button className={i===0?'is-active':''} key={item}>{item}</button>)}</div><div className="filter-group filter-tags"><h4>Объем / Вес</h4>{['1000 мл','20 г','20 мл','200 мл','20 г','1000 мл','6 мл','3 г','200 мл','200 мл','1000 мл'].map((item,i)=><button className={i===0?'is-active':''} key={`${item}-${i}`}>{item}</button>)}</div><button className="filter-apply">Применить <Check size={16}/></button><button className="filter-reset">Сбросить фильтры <X size={16}/></button></aside><div className="catalog-products"><div className="catalog-grid">{Array.from({length:12},(_,i)=><CatalogProductCard index={i} key={i}/>)}</div><nav className="catalog-pagination"><button><ChevronDown size={15}/></button>{[1,2,3,4].map(n=><button className={n===2?'is-active':''} key={n}>{n}</button>)}<span>…</span><button>7</button><button className="catalog-pagination__next">Вперед <ChevronDown size={15}/></button></nav></div></section></Shell>
 }
 
 function ProductPage() {
@@ -184,6 +276,25 @@ function ProductPage() {
     <section className="product-block"><h2>Технические характеристики</h2><div className="spec-grid">{[['Плотность','не менее 0,95 г/см³'],['Время пленкообразования','3–15 минут'],['Скорость полимеризации','2 мм/сутки'],['Температура эксплуатации','от −40°С до +150°С'],['Водостойкость','100%'],['Срок годности','24 месяца']].map(([a,b])=><p key={a}><span>{a}</span><b>{b}</b></p>)}</div></section>
     <section className="product-block product-application"><div><h2>Применение</h2><p>Набор применяется для склеивания, ремонта и фиксации древесины, МДФ, ДСП, резины, кожи, стекла, металла и большинства пластмасс.</p></div><img src={`${A}pages/product/1.png`} alt="Применение клея"/></section>
     <section className="product-block"><h2>Документация</h2><DocumentGrid small /></section><section className="product-block question-block"><LeadForm title="Задайте ваш вопрос" text="Наш консультант ответит в течение 30 минут" /></section></section></Shell>
+}
+
+function ProductPageV2() {
+  const [seamLength,setSeamLength]=useState('1')
+  const [depth,setDepth]=useState('10')
+  const [width,setWidth]=useState('10')
+  const [calculated,setCalculated]=useState(false)
+  const consumption=Math.max(1,Math.ceil((Number(seamLength)||0)*(Number(depth)||0)*(Number(width)||0)/300))
+  const specs=[['Плотность г/см³','не менее 0,95'],['Время пленкообразования','3–15 минут'],['Скорость полимеризации','2 мм/сутки'],['Твердость по ШОР А, усл. ед.','20±5'],['Условная прочность при разрыве, МПа','не менее 0,8'],['Возможность к деформации, %','до 25'],['Водостойкость, %','100'],['Расход 1 картриджа, полоса диаметром 5 мм','от 12 до 14 м/п'],['Температура эксплуатации','от −40°C до +150°C']]
+    return <Shell className="product-page-v2"><section className="section product-overview"><div className="product-overview__visual"><img src={`${A}pages/catalog/2.png`} alt="Клей ПВА D3 столярный влагостойкий"/><span>В коробке<br/><b>12 штук</b></span></div><div className="product-overview__copy"><small>Артикул: 2025-П38</small><h1>Клей ПВА D3 столярный влагостойкий</h1><p>Двухкомпонентный быстрый клей: спрей-активатор KLEI’M PRO (прозрачный) + клей-гель моментальный цианоакрилатный KLEI’M PRO (прозрачный).</p><p>Набор предназначен для склеивания, ремонта и фиксации всех видов древесины и деревянных элементов (МДФ, ДСП и т.п.), а также резины, кожи, стекла, металла (в том числе алюминия) и большинства пластмасс. Клей бесцветный, не капает и не оседает, обладает высокой прочностью сцепления, легко наносится и даёт быстрый результат. Подходит для вертикальных поверхностей, идеален как для пористых, так и для гладких оснований. Активатор ускоряет схватывание. Термостойкость клеевого соединения — от −20 °C до +70 °C, температура нанесения и применения — от +5 °C до +35 °C.</p><div className="product-features">{['Защита от плесени и грибка','Постоянная эластичность','Тиксотропный — не трескается','Не токсичен, без запаха'].map((item,i)=><article key={item}><img src={`${A}product-feature-${i+1}.png`} alt=""/><span>{item}</span></article>)}</div><div className="product-life"><b>Срок годности</b><span>24 месяца / 18 месяцев</span></div><div className="product-colors"><b>Цвет</b><div>{[['#fff','Белый'],['repeating-linear-gradient(90deg,#fff 0 3px,#ddd 3px 4px)','Прозрачный'],['#d7d7d7','Серый'],['#ffe1b7','Бежевый']].map(([color,label])=><span key={label}><i style={{background:color}}/>{label}</span>)}</div></div><div className="product-buy"><a href="https://www.vseinstrumenti.ru" target="_blank" rel="noreferrer"><span>Купить на ВсеИнструменты</span><img src={`${A}vseinstrumenti.png`} alt="ВсеИнструменты"/></a><Link to="/contacts">Купить оптом <ArrowRight size={18}/></Link></div></div></section>
+    <section className="section product-specs"><h2>Технические характеристики</h2><div>{specs.map(([name,value])=><p key={name}><span>{name}</span><b>{value}</b></p>)}</div></section>
+    <section className="section product-use"><div className="product-tabs"><button className="is-active">Применение</button><button>Свойства</button><p>Двух-компонентный набор «Клей-Спрей-Активатор (аэрозоль)», состоящий из «Активатора» и «Клея-геля моментального цианоакрилатного». Высокой вязкости, применяется для склеивания, ремонта и фиксации всех видов древесины и деревянных элементов, а также резины, кожи, стекла, металла и пластмасс.</p></div><div className="storage-note"><img src={`${A}storage-icon.png`} alt=""/><p>Хранение и транспортировка<br/><b>Осуществляются в сухом прохладном месте при температуре от +5° до +25°C</b></p></div></section>
+    <section className="section application-guide"><img src={`${A}product-application.png`} alt="Нанесение герметика"/><div><h2>Указания<br/>по применению</h2><p>Поверхность должна быть сухая и чистая, без пыли, грязи, ржавчины и жира. Распылите активатор ровным слоем на одну из поверхностей и дайте ему испариться. Нанесите клей на другую поверхность. Соедините детали и удерживайте их вместе в течение нескольких секунд.</p></div></section>
+    <section className="section product-documents"><h2>Документация</h2><div>{['Лист технической информации','Отказное письмо / Декларация соответствия','Экспертное заключение','Паспорт безопасности','Свидетельство о государственной регистрации','Сертификат соответствия','Протокол испытаний'].map((item,i)=><a href={`${A}pages/documents/${(i%7)+1}.png`} download key={item}><img src={`${A}pdf-icon.png`} alt="PDF"/><span>{item}</span><b><ArrowRight size={17}/></b></a>)}</div></section>
+    <section className="section product-questions"><div className="questions-feed"><h2>Вопросы</h2><article className="question-author"><span>И</span><p><b>Иван В.</b><small>01.07.2026</small></p></article><p className="question-message">Важный вопрос. Какой клей подойдет для дерева?</p><div className="question-answer"><article><img src={`${A}kleim-avatar.png`} alt="KLEIM PRO"/><p><b>Мастер Кляйн</b><small>01.07.2026</small></p></article><p>Добрый день. Да, универсальный высококачественный клей на водной основе, предназначенный для надёжного склеивания древесины и других материалов. Он обеспечивает прочное и долговечное соединение, обладает быстрым начальным схватыванием и полностью высыхает за короткое время. После высыхания клей становится прозрачным и не оставляет видимых следов. Клей удобен в нанесении, легко распределяется кистью или шпателем, экологически безопасен и не содержит токсичных растворителей.</p></div><button>Показать еще 4</button></div><form className="question-form" onSubmit={e=>e.preventDefault()}><h3>Задайте ваш вопрос</h3><p>И наш консультант ответит в течение 30 минут</p><input placeholder="Ваше имя"/><input type="email" placeholder="E-mail"/><textarea placeholder="Ваш вопрос"/><label><input type="checkbox" defaultChecked/> Согласие на обработку персональных данных</label><button>Задать вопрос</button></form></section>
+    <section className="section usage-calculator"><h2>Калькулятор<br/>расхода</h2><div className="calculator-fields"><label>Длина шва (мм)<input value={seamLength} onChange={e=>setSeamLength(e.target.value)}/></label><label>Толщина шва (мм)<input value={depth} onChange={e=>setDepth(e.target.value)}/></label><label>Ширина шва (мм)<input value={width} onChange={e=>setWidth(e.target.value)}/></label><button onClick={()=>setCalculated(true)}>Рассчитать</button></div><div className="calculator-results"><p>Нужно покупать при заданной толщине шва, шт <b>{calculated?consumption:1}</b></p><p>Нужно покупать при рекомендуемой толщине шва, шт <b>{calculated?Math.max(1,Math.ceil(consumption*.8)):1}</b></p><p>Рекомендуемая толщина заполнения шва (мм) <b>10</b></p></div></section>
+    <section className="section similar-products"><div className="section-heading"><h2>Похожие товары</h2><div className="slider-buttons"><button><ArrowLeft/></button><button><ArrowRight/></button></div></div><div className="similar-products__track">{[0,1,2,3].map(i=><CatalogProductCard index={i} key={i}/>)}</div></section>
+    <section className="section individual"><h2>Индивидуальный<br/>подход</h2><div className="individual__visual"><img src={`${A}pages/product/1.png`} alt="Герметик KLEIM PRO"/><span>Подберём для вас продукт под конкретные условия применения</span></div><LeadForm decoration title="Оставьте заявку" text="На индивидуальное решение"/></section>
+  </Shell>
 }
 
 function AboutPage() {
@@ -236,14 +347,14 @@ function BlogPage(){
 
 function ArticlePage(){return <Shell><section className="section article-page"><Breadcrumbs items={['Блог','Акриловый герметик A201']} /><Link className="back-link" to="/blog"><ArrowLeft size={18}/> Назад</Link><h1>Акриловый герметик A201:<br/>полное руководство по применению</h1><img className="article-hero" src={`${A}pages/article/2.png`} alt="Акриловый герметик A201"/><article><h2>Для каких работ подходит A201</h2><p>Акриловый герметик A201 подходит для работы с бетоном, кирпичом, штукатуркой, древесиной и другими распространёнными строительными основаниями. Его применяют для заполнения небольших трещин, герметизации малоподвижных стыков и оформления примыканий.</p><p>После высыхания поверхность герметика можно окрашивать совместимыми лакокрасочными материалами, благодаря чему шов легко сделать практически незаметным.</p><h2>Подготовка инструментов</h2><p>Для работы понадобится картридж A201, монтажный пистолет, строительный нож и инструмент для выравнивания шва. Основание очищают от пыли, грязи, жира и старых материалов.</p><blockquote>Качество шва напрямую зависит от состояния основания и соблюдения технологии нанесения.</blockquote><h2>Порядок нанесения</h2><p>Срежьте наконечник, установите картридж в пистолет и равномерно заполните шов. Разровняйте состав до начала образования поверхностной плёнки.</p></article></section><section className="section recommended"><h2>Читайте также</h2><div className="blog-list blog-list--compact">{articles.map(([t,p],i)=><Link to="/blog/article" className="blog-card" key={t}><img src={`${A}pages/blog/${i+1}.png`} alt=""/><div><h2>{t}</h2><p>{p}</p></div></Link>)}</div></section></Shell>}
 
-function ContactsPage(){return <Shell noContacts><PageIntro title="Контакты" /><section className="section contact-page"><div className="contact-page__details"><h2>Производство и офис</h2><a href="tel:+78000000000">8 (800) 000-00-00</a><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a><p><MapPin/>Россия, Республика Татарстан,<br/>г. Бугульма, ул. Нефтяников, д. 17, оф. 6</p><p>Пн–Пт: 08:00–17:00</p></div><img src={`${A}pages/contacts/1.png`} alt="Карта офиса"/></section><section className="section form-panel"><LeadForm title="Свяжитесь с нами" text="Ответим на вопросы о продукции и сотрудничестве"/></section></Shell>}
+function ContactsPage(){return <Shell noContacts><section className="section contacts-page"><h1>Контакты</h1><div className="contacts-page__info"><div className="contacts-page__communication"><div><small>Телефон</small><a href="tel:+78000000000">8 (800) 000-00-00</a></div><div><small>Почта</small><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a></div></div><div className="contacts-page__addresses"><small>Адрес</small><article><img src={`${A}contact-marker.png`} alt=""/><div><p>Россия, РТ, г. Бугульма,<br/>ул. Нефтяников, д. 17, офис 6</p><a href="https://yandex.ru/maps/?text=Бугульма%2C%20улица%20Нефтяников%2C%2017" target="_blank" rel="noreferrer">Построить маршрут →</a></div></article><article><img src={`${A}contact-marker.png`} alt=""/><div><p>Россия, Московская область, г. Щёлково,<br/>ул. 3-я линия, д. 27 (секция №1).</p><a href="https://yandex.ru/maps/?text=Щёлково%2C%203-я%20линия%2C%2027" target="_blank" rel="noreferrer">Построить маршрут →</a></div></article></div><div className="contacts-page__messengers"><small>Мессенджеры</small><a href="https://t.me" target="_blank" rel="noreferrer"><img src={`${A}contact-telegram.png`} alt="Telegram"/></a><a href="https://max.ru" target="_blank" rel="noreferrer"><img src={`${A}contact-max.png`} alt="MAX"/></a></div></div><div className="contacts-page__map"><img src={`${A}map2.png`} alt="Заглушка карты офисов"/></div></section></Shell>}
 
 function NotFound(){return <Shell><section className="section not-found"><strong>404</strong><h1>Страница не найдена</h1><Button to="/">Вернуться на главную</Button></section></Shell>}
 
 function App(){
   const path=useHashRoute()
   const pages={
-    '/':<Home/>, '/catalog':<CategoriesPage/>, '/catalog/glue':<CatalogPage/>, '/product/pva-d3':<ProductPage/>,
+    '/':<Home/>, '/catalog':<CategoriesPage/>, '/catalog/glue':<CatalogPage/>, '/glue':<CatalogPage/>, '/product/pva-d3':<ProductPageV2/>,
     '/about':<AboutPage/>, '/wholesale':<WholesalePage/>, '/advertising':<PromoPage type="advertising"/>, '/packaging':<PromoPage type="packaging"/>, '/selector':<SelectorPage/>,
     '/career':<InfoPage type="career"/>, '/suppliers':<InfoPage type="suppliers"/>, '/ambassadors':<InfoPage type="ambassadors"/>, '/charity':<InfoPage type="charity"/>,
     '/documents':<DocumentsPage/>, '/blog':<BlogPage/>, '/blog/article':<ArticlePage/>, '/contacts':<ContactsPage/>,
