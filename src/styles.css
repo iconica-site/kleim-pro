@@ -672,7 +672,7 @@ p { margin: 0; }
 .about-team__side { display:flex; flex-direction:column; justify-content:space-between; }
 .about-team__track { min-width:0; display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
 .about-team__track article { flex:0 0 380px; border-radius:27px; overflow:hidden; background:#f4f4f4; scroll-snap-align:start; }
-.about-team__track article>img { width:100%; height:330px; object-fit:cover; }
+.about-team__track article>img { width:100%; height:330px; object-fit:cover; object-position:center 18%; }
 .about-team__track article>div { min-height:125px; padding:22px; }
 .about-team h3 { margin:0 0 12px; font-size:19px; font-weight:500; }
 .about-team article span { color:#999; font-size:12px; }
