@@ -124,7 +124,7 @@ function Header({ overlay = false }) {
       {catalogOpen && <div id="catalog-menu"><CatalogMenu onClose={closeMenus} /></div>}
       {companyOpen && <CompanyMenu onClose={closeMenus} />}
     </header>
-    {(catalogOpen || companyOpen) && <button className="menu-backdrop" aria-label="Закрыть меню" onClick={closeMenus} />}
+    {catalogOpen && <button className="menu-backdrop" aria-label="Закрыть меню" onClick={closeMenus} />}
   </>
 }
 
@@ -303,7 +303,44 @@ function AboutPage() {
 }
 
 function WholesalePage() {
-  return <Shell><PageIntro title="Оптовым клиентам и дилерам" /><section className="section wholesale-hero"><div><h2>Развиваем бизнес вместе</h2><p>Выгодные оптовые цены, персональный менеджер, стабильные поставки и маркетинговая поддержка.</p><Button to="/contacts">Стать партнёром</Button></div><img src={`${A}pages/about/8.png`} alt="Логистика KLEIM PRO"/></section><section className="section"><h2>Условия сотрудничества</h2><div className="number-cards">{[['01','Персональные цены'],['02','Плановые поставки'],['03','Поддержка продаж']].map(([n,t])=><article key={n}><strong>{n}</strong><h3>{t}</h3><p>Индивидуальные условия под объём и формат вашего бизнеса.</p></article>)}</div></section><section className="section split-section"><div><h2>Стабильная логистика</h2><p>Собственный склад и автопарк позволяют поддерживать наличие и соблюдать сроки поставок.</p></div><img src={`${A}pages/about/8.png`} alt="Автопарк"/></section><section className="section form-panel"><LeadForm title="Станьте нашим партнёром" text="Оставьте контакты, персональный менеджер подготовит предложение"/></section></Shell>
+  const [sent,setSent]=useState(false)
+  const productsRef=useRef(null)
+  const conditions=[
+    'Мы предлагаем выгодные условия для оптовых клиентов и дилеров: гибкую систему скидок, индивидуальные прайс-листы, отсрочку платежа и приоритетную отгрузку.',
+    'Работаем напрямую с производства, без посредников.',
+    'Обеспечиваем стабильные поставки, маркетинговую поддержку и обучение вашего персонала работе с продукцией KLEIM PRO.',
+  ]
+  const benefits=[
+    ['figma/figma-partner-wholesale.png','Профессиональная продукция','Вы получаете доступ к линейке герметиков и клеевых систем европейского качества, разработанных для профессионального применения.'],
+    ['figma/figma-partner-stm.png','Полная поддержка','Мы предоставляем рекламные материалы, образцы продукции и техническую поддержку на всех этапах сотрудничества.'],
+    ['figma/figma-partner-stock.png','Развитие продаж','Помогаем увеличивать ваши продажи и выстраиваем долгосрочное взаимовыгодное партнёрство.'],
+  ]
+  const scrollProducts=direction=>productsRef.current?.scrollBy({left:direction*420,behavior:'smooth'})
+  return <Shell className="wholesale-page">
+    <section className="section wholesale-intro"><h1>Оптовым клиентам<br/>и дилерам</h1><div className="wholesale-badge"><span>Для<br/>оптовых<br/>партнёров</span><img src={`${A}wholesale-logo.jpg`} alt="KLEIM PRO"/></div><img className="wholesale-intro__image" src={`${A}wholesale-sales.jpg`} alt="Оптовые продажи KLEIM PRO"/></section>
+    <section className="section wholesale-conditions"><h2>Условия<br/>сотрудничества</h2><div className="wholesale-condition-grid">{conditions.map((text,index)=><article key={text}><strong>0{index+1}</strong><p>{text}</p></article>)}</div></section>
+    <section className="section wholesale-statement"><b>Развитие вместе с KLEIM PRO</b><p>Мы заинтересованы в долгосрочном сотрудничестве. Предоставляем всё необходимое для успешной работы: конкурентные цены, поддержку продаж, обучение и маркетинговые инструменты.</p></section>
+    <section className="section wholesale-benefits"><h2>Преимущества<br/>партнёрства</h2><div>{benefits.map(([image,title,text])=><article key={title}><img src={`${A}${image}`} alt=""/><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></section>
+    <section className="section wholesale-logistics"><div><h2>Логистика<br/>и поставки</h2><p>Отгружаем продукцию со склада в кратчайшие сроки. Доставляем по всей России транспортными компаниями или собственным транспортом. Возможна отгрузка в день заказа при наличии товара на складе. Мы берём на себя организацию логистики, чтобы вы могли сосредоточиться на продажах.</p></div><img src={`${A}wholesale-logistics.jpg`} alt="Логистика и поставки KLEIM PRO"/></section>
+    <section className="section wholesale-request"><div className="wholesale-request__visual"><h2>Хотите стать оптовым<br/>клиентом?</h2><img src={`${A}pages/product/1.png`} alt="Герметик KLEIM PRO"/></div><form onSubmit={event=>{event.preventDefault();setSent(true)}}><img src={`${A}faq-products-cutout.png`} alt="Продукция KLEIM PRO"/><div><h3>Заполните форму</h3><p>И мы с вами свяжемся</p><input required placeholder="ФИО"/><input required type="tel" placeholder="Телефон"/><textarea rows="3" placeholder="Ваш вопрос"/><label><input type="checkbox" defaultChecked/> Согласие на обработку персональных данных</label><a href="#privacy">Политика конфиденциальности</a><button type="submit">{sent?'Заявка отправлена':'Отправить заявку'}</button></div></form></section>
+    <section className="section wholesale-products"><div className="section-heading"><h2>Товары подходящие<br/>для вас</h2><div className="slider-buttons"><button onClick={()=>scrollProducts(-1)} aria-label="Назад"><ArrowLeft/></button><button onClick={()=>scrollProducts(1)} aria-label="Вперёд"><ArrowRight/></button></div></div><div className="wholesale-products__track" ref={productsRef}>{[0,1,2,3,4].map(index=><CatalogProductCard index={index} key={index}/>)}</div></section>
+  </Shell>
+}
+
+function PackagingCard({ title, colors=['Белый','Чёрный'], compact=false }) {
+  const specs=compact?[["Материал","ПНД (HDPE)"],["Диаметр горла","28 мм"],["Вес","4 г"],["Высота","35 мм"]]:[["Материал","ПНД (HDPE)"],["Объём","310 мл"],["Вес","46 г"],["Высота","215 мм"],["Диаметр резьбы","15 мм"]]
+  return <article className="packaging-card"><div className="packaging-card__image"><img src={`${A}packaging-cartridges.jpg`} alt={title}/></div><div className="packaging-card__body"><h3>{title}</h3><div className="packaging-card__specs">{specs.map(([name,value])=><p key={name}><span>{name}</span><b>{value}</b></p>)}</div><div className="packaging-card__colors"><small>Доступные цвета</small><div>{colors.map((color,index)=><span key={color}><i className={`packaging-color packaging-color--${['white','black','red','blue'][index%4]}`}/>{color}</span>)}</div></div></div></article>
+}
+
+function PackagingPage(){
+  const [sent,setSent]=useState(false)
+  const sections=[
+    {tag:'Картриджи и комплектующие',title:'Картриджи, носики, колпачки, поршни',text:'Стандартная комплектация картриджа 310 мл под герметики и клеевые составы.',items:['Картриджи','Носик-дозатор','Колпачки']},
+    {tag:'Крышки с дозатором',title:'Колпачки-дозаторы «Пирамидка» и поршень',text:'Резьбовые дозирующие колпачки под разные диаметры горла бутылки.',items:['Пирамидка','Пирамидка ПВА D36','Поршень']},
+    {tag:'Бутылки',title:'Три линейки бутылок под разные составы',text:'Купольная усиленная, ПВА D36 и прозрачная — с полной размерной сеткой.',items:['Бутылка купольная','Бутылка ПВА D36','Бутылка прозрачная']},
+    {tag:'Завинчивающиеся крышки',title:'Крышка «Пуш-пулл»',text:'Финальный элемент упаковки для бутылок прозрачной и купольной линеек.',items:['Крышка «Пуш-пулл»']},
+  ]
+  return <Shell className="packaging-page"><section className="section packaging-hero"><div className="packaging-hero__heading"><h1>Упаковка под<br/>ваш продукт</h1><div className="wholesale-badge"><span>Для<br/>оптовых<br/>партнёров</span><img src={`${A}wholesale-logo.jpg`} alt="KLEIM PRO"/></div></div><div className="packaging-hero__visual"><img src={`${A}pages/packaging/2.png`} alt="Упаковка под ваш продукт"/><div className="packaging-hero__note">Картриджи, бутылки, носики-дозаторы, колпачки и крышки собственного производства — с точными характеристиками по весу, высоте и диаметру.</div><div className="packaging-manager"><img src={`${A}packaging-operator.jpg`} alt="Персональный менеджер"/><p>Полные тех. карты — у вашего персонального менеджера</p><Link to="/contacts">Оставить заявку <span>↗</span></Link></div></div></section>{sections.map((section,index)=><section className="section packaging-group" key={section.title}><span className="packaging-tag">⌁ {section.tag}</span><h2>{section.title}</h2><p>{section.text}</p><div className={`packaging-grid ${section.items.length===1?'packaging-grid--single':''}`}>{section.items.map(item=><PackagingCard title={item} compact={index===1||index===3} colors={index===2?['Белый','Прозрачный']:index===3?['Красно-белая','Сине-белая']:['Белый','Чёрный','Красный'] } key={item}/>)}</div></section>)}<section className="section packaging-request"><div><h2>Соберём для вас<br/>пакет рекламной<br/>продукции под ваш<br/>объём закупок</h2><img src={`${A}packaging-merch.jpg`} alt="Мерч KLEIM PRO"/></div><form onSubmit={event=>{event.preventDefault();setSent(true)}}><img src={`${A}faq-products-cutout.png`} alt="Продукция KLEIM PRO"/><div><h3>Оставьте контакты</h3><p>И персональный менеджер свяжется с вами, подберёт позиции и расскажет об условиях бонусной программы.</p><input required placeholder="ФИО"/><input required type="tel" placeholder="Телефон"/><textarea rows="3" placeholder="Ваш вопрос"/><label><input type="checkbox" defaultChecked/> Согласие на обработку персональных данных</label><a href="#privacy">Политика конфиденциальности</a><button type="submit">{sent?'Заявка отправлена':'Отправить заявку'}</button></div></form></section></Shell>
 }
 
 const promoConfigs={
@@ -317,8 +354,23 @@ function PromoPage({ type }) {
 }
 
 function SelectorPage(){
-  const [answer,setAnswer]=useState(0);const options=['Крыша','Фасад','Ванная и кухня','Дерево','Стекло','Металл']
-  return <Shell><PageIntro title="Какой герметик выбрать?" parent="Каталог" /><section className="section selector"><div className="selector__visual"><img src={`${A}pages/selector/2.png`} alt="Схема подбора герметиков"/></div><div className="selector__panel"><span>Шаг 1 из 3</span><h2>Где будет использоваться герметик?</h2><div>{options.map((o,i)=><button className={answer===i?'is-active':''} onClick={()=>setAnswer(i)} key={o}>{o}</button>)}</div><Button to="/product/pva-d3">Показать результат</Button></div></section><section className="section recommended"><h2>Подходящие решения</h2><div className="catalog-grid">{[0,1,2].map(i=><ProductCard index={i} key={i}/>)}</div></section></Shell>
+  const [mode,setMode]=useState('surface')
+  const [surface,setSurface]=useState('Бетон')
+  const surfaces=['Гладкие','Пористые','Стекло','Керамика','Камень','Бетон','Металл','ПВХ','Дерево','Аквариум']
+  const markers=[['2',65,10],['4',67,40],['5',27,58],['6',30,82],['7',35,67],['8',59,72],['9',86,43],['10',70,51],['11',94,67],['12',82,72],['13',48,85]]
+  const selectorProducts=[
+    {tag:'Рекомендуется',tone:'green',chips:['Вибрации','Влажность','УФ-стойкость'],dots:'green'},
+    {tag:'Применимо',tone:'soft',chips:['Вибрации'],dots:'yellow'},
+    {tag:'Применимо',tone:'soft',chips:['Вибрации'],dots:'yellow'},
+    {tag:'Применимо',tone:'soft',chips:['Влажность','УФ-стойкость'],dots:'yellow'},
+  ]
+  return <Shell className="selector-page">
+    <section className="selector-hero">
+      <div className="selector-hero__copy"><h1>Какой<br/>герметик<br/>выбрать?</h1><p>Схема подбора герметиков</p><div className="selector-hero__description">В каждом доме есть десятки мест, где нужна герметизация. От выбора состава зависит, будет ли сухо, тепло и без плесени. Смотрите схему — и выбирайте герметик под конкретную задачу.</div><div className="selector-hero__actions"><button className="button" onClick={()=>document.getElementById('selector-table')?.scrollIntoView({behavior:'smooth'})}>Подобрать герметик <span>↗</span></button><button className="button button--dark" onClick={()=>document.getElementById('selector-table')?.scrollIntoView({behavior:'smooth'})}>Таблица подбора <span>↗</span></button></div></div>
+      <div className="selector-house"><img src={`${A}selector-house.jpg`} alt="Дом со схемой применения герметиков"/><article className="selector-product-popover"><button aria-label="Закрыть">×</button><img src={`${A}pages/catalog/2.png`} alt="Герметик KLEIM PRO"/><div><small>Крыша</small><b>Герметик силиконовый<br/>санитарный E301</b><i/><i/><Link to="/product/pva-d3">Выбрать герметик</Link></div></article>{markers.map(([n,x,y])=><button className="house-marker" style={{left:`${x}%`,top:`${y}%`}} key={n}>{n}<span>↗</span></button>)}</div>
+    </section>
+    <section className="section selector-table" id="selector-table"><h2>Таблица подбора</h2><div className="selector-tabs"><button className={mode==='purpose'?'is-active':''} onClick={()=>setMode('purpose')}>Назначение</button><button className={mode==='surface'?'is-active':''} onClick={()=>setMode('surface')}>Поверхность</button></div><p>Выберите поверхность</p><div className="surface-list">{surfaces.map(item=><button className={surface===item?'is-active':''} onClick={()=>setSurface(item)} key={item}>{item}</button>)}</div><div className="selector-results">{selectorProducts.map((item,index)=><article className="selector-result" key={index}><div className="selector-result__image"><img src={`${A}pages/catalog/2.png`} alt="Герметик KLEIM PRO"/></div><div className="selector-result__body"><span className={`selector-result__status selector-result__status--${item.tone}`}>{item.tag}</span><small>Санитарный</small><h3>KSK 14X</h3><p>Силиконовый нейтральный<br/>для кровли и водостоков</p><div className="selector-result__chips">{item.chips.map(chip=><b key={chip}>{chip}</b>)}</div><em>⊕ Очень стоек к ультрафиолету</em><div className="selector-result__smell"><span>Запах при нанесении</span><i className={item.dots}/><i className={item.dots}/><i/></div></div></article>)}</div></section>
+  </Shell>
 }
 
 const infoData={
@@ -355,7 +407,7 @@ function App(){
   const path=useHashRoute()
   const pages={
     '/':<Home/>, '/catalog':<CategoriesPage/>, '/catalog/glue':<CatalogPage/>, '/glue':<CatalogPage/>, '/product/pva-d3':<ProductPageV2/>,
-    '/about':<AboutPage/>, '/wholesale':<WholesalePage/>, '/advertising':<PromoPage type="advertising"/>, '/packaging':<PromoPage type="packaging"/>, '/selector':<SelectorPage/>,
+    '/about':<AboutPage/>, '/wholesale':<WholesalePage/>, '/advertising':<PromoPage type="advertising"/>, '/packaging':<PackagingPage/>, '/selector':<SelectorPage/>,
     '/career':<InfoPage type="career"/>, '/suppliers':<InfoPage type="suppliers"/>, '/ambassadors':<InfoPage type="ambassadors"/>, '/charity':<InfoPage type="charity"/>,
     '/documents':<DocumentsPage/>, '/blog':<BlogPage/>, '/blog/article':<ArticlePage/>, '/contacts':<ContactsPage/>,
   }
