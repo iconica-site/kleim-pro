@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronDown,
-  Filter, MessageSquare, Search, X,
+  Filter, MessageSquare, X,
 } from 'lucide-react'
 
 const A = `${import.meta.env.BASE_URL}assets/`
@@ -118,7 +118,7 @@ function Header({ overlay = false }) {
         <Link to="/catalog" onClick={closeMenus}>Наша продукция</Link>
         <Link to="/blog" onClick={closeMenus}>Блог</Link><Link to="/contacts" onClick={closeMenus}>Контакты</Link>
       </nav>
-      <label className="search"><Search size={20} /><input aria-label="Поиск по каталогу" placeholder="Поиск по каталогу" /></label>
+      <label className="search"><img className="search__icon" src={`${A}search-new.png`} alt=""/><input aria-label="Поиск по каталогу" placeholder="Поиск по каталогу" /></label>
       <div className="header-contacts"><a href="mailto:info@kleimpro.ru">info@kleimpro.ru</a><a href="tel:+78000000000">8 (800) 000-00-00</a></div>
       <div className="messengers"><a href="https://t.me" target="_blank"><img src={`${A}telegram.svg`} alt="Telegram" />TG</a><i /><a href="https://max.ru" target="_blank"><img src={`${A}max.svg`} alt="MAX" />MAX</a></div>
       {catalogOpen && <div id="catalog-menu"><CatalogMenu onClose={closeMenus} /></div>}

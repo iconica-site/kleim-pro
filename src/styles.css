@@ -179,6 +179,7 @@ p { margin: 0; }
 .nav a:nth-child(3) { display: none; }
 .nav a:hover { color: var(--red); }
 .search { margin-left: auto; width: clamp(250px, 24vw, 462px); height: 48px; border: 1px solid #dbdbdb; border-radius: 16px; display: flex; align-items: center; gap: 12px; padding: 0 20px 0 24px; }
+.search__icon { width:20px; height:20px; flex:0 0 20px; object-fit:contain; }
 .search input { min-width: 0; flex: 1; border: 0; outline: 0; color: var(--ink); }
 .search input::placeholder { color: #d1d1d1; }
 .header-contacts { display: flex; flex-direction: column; align-items: flex-end; font-size: 14px; font-weight: 600; line-height: 1.5; white-space: nowrap; }
