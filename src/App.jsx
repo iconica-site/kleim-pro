@@ -244,7 +244,7 @@ function FaqSection() {
 }
 
 function Home() {
-  return <main id="top"><section className="hero"><img className="hero__background" src={`${A}figma/figma-hero.png`} alt="" /><Header overlay /><div className="hero__shade" /><div className="hero__content"><div className="eyebrow"><span />Более 500 позиций в наличии</div><h1>Производство<br />профессиональных<br />герметиков<br />и клеевых систем</h1><p>Надежный производитель строительной химии для бизнеса. Стабильное качество, собственное производство и поставки по всей России.</p><Button>Оптовым клиентам и дилерам</Button></div></section>
+  return <main id="top"><section className="hero"><img className="hero__background" src={`${A}figma/figma-hero.png`} alt="" /><Header overlay /><div className="hero__shade" /><button className="hero__play" aria-label="Воспроизвести видео"><img src={`${A}play.png`} alt=""/></button><div className="hero__content"><div className="eyebrow"><span />Более 500 позиций в наличии</div><h1>Производство<br />профессиональных<br />герметиков<br />и клеевых систем</h1><p>Надежный производитель строительной химии для бизнеса. Стабильное качество, собственное производство и поставки по всей России.</p><Button>Оптовым клиентам и дилерам</Button></div></section>
     <CompanySection />
     <section className="section partners"><h2>Лучшие условия для партнёров</h2><div className="partner-grid">{[['figma-partner-full-cycle.png','Производитель полного цикла'],['figma-partner-stm.png','Производство под СТМ'],['figma-partner-stock.png','Постоянное наличие'],['figma-partner-wholesale.png','Оптовые цены'],['figma-partner-documents.png','Документы']].map(([img,title])=><Link className="partner-card" to="/wholesale" key={title}><img src={`${A}figma/${img}`} alt=""/><div><h3>{title}</h3><p>Собственные заводы, лаборатории и стабильные поставки.</p></div></Link>)}<LeadForm compact title="Лучшие условия" text="Оставьте заявку и мы предложим лучшие цены." /></div></section>
     <ProductionSection />
@@ -363,8 +363,15 @@ function WholesalePage() {
 }
 
 function PackagingCard({ title, colors=['Белый','Чёрный'], compact=false }) {
+  const bottleRows={
+    'Бутылка купольная':[['0,25','22','145','55'],['0,5','34','190','65'],['1,0','58','235','80']],
+    'Бутылка ПВА D36':[['0,33','24','125','65'],['1,0','58','230','80']],
+    'Бутылка прозрачная':[['0,2','22','150','55'],['0,4','22','195','60'],['0,5','22','220','60'],['0,75','34','225','75'],['1,0','34','250','80']]
+  }
+  const bottleTable=bottleRows[title]
   const specs=compact?[["Материал","ПНД (HDPE)"],["Диаметр горла","28 мм"],["Вес","4 г"],["Высота","35 мм"]]:[["Материал","ПНД (HDPE)"],["Объём","310 мл"],["Вес","46 г"],["Высота","215 мм"],["Диаметр резьбы","15 мм"]]
-  return <article className="packaging-card"><div className="packaging-card__image"><img src={`${A}packaging-cartridges.jpg`} alt={title}/></div><div className="packaging-card__body"><h3>{title}</h3><div className="packaging-card__specs">{specs.map(([name,value])=><p key={name}><span>{name}</span><b>{value}</b></p>)}</div><div className="packaging-card__colors"><small>Доступные цвета</small><div>{colors.map((color,index)=><span key={color}><i className={`packaging-color packaging-color--${['white','black','red','blue'][index%4]}`}/>{color}</span>)}</div></div></div></article>
+  const visibleSpecs=bottleTable?[["Материал","ПНД (HDPE)"],["Диаметр горла","28 мм"],["Высота горла","16 мм"]]:specs
+  return <article className="packaging-card"><div className="packaging-card__image"><img src={`${A}packaging-cartridges.jpg`} alt={title}/></div><div className="packaging-card__body"><h3>{title}</h3><div className="packaging-card__specs">{visibleSpecs.map(([name,value])=><p key={name}><span>{name}</span><b>{value}</b></p>)}</div>{bottleTable?<div className="packaging-card__volume"><div><b>Объём, л</b><b>Вес, г</b><b>Высота, мм</b><b>Диаметр, мм</b></div>{bottleTable.map((row,index)=><div key={index}>{row.map((value,i)=><span key={i}>{value}</span>)}</div>)}</div>:<div className="packaging-card__colors"><small>Доступные цвета</small><div>{colors.map((color,index)=><span key={color}><i className={`packaging-color packaging-color--${['white','black','red','blue'][index%4]}`}/>{color}</span>)}</div></div>}</div></article>
 }
 
 function PackagingPage(){

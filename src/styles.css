@@ -1576,3 +1576,38 @@ p { margin: 0; }
   .advertising-request>div>img { inset:80px 0 0; height:360px; }
   .advertising-request>form { min-height:0; }
 }
+
+/* Final typography adjustments */
+.hero__play { position:absolute; z-index:3; top:48%; left:75%; width:150px; height:150px; padding:0; border:0; border-radius:50%; background:transparent; transform:translate(-50%,-50%); }
+.hero__play img { width:100%; height:100%; object-fit:contain; }
+.mega-menu__groups a,.mega-menu__client { font-size:16px; }
+.catalog-head__row nav button,.filter-tags button,.catalog-product__sizes span,.catalog-head__row>a { font-size:16px; }
+.product-features article { font-size:14px; }
+.product-specs p,.storage-note p { font-size:16px; }
+.product-documents a>span { font-size:24px; }
+.questions-feed>p,.questions-feed .question-answer>p { font-size:16px; }
+.calculator-fields label,.calculator-results p { font-size:18px; }
+.about-production__stats p { font-size:14px; }
+.about-production__stats span { font-size:16px; }
+.about-innovations p,.about-scroll-track p,.about-quality__points p,.article-grid p { font-size:16px; }
+.about-team article span { font-size:15px; }
+.selector-hero__description,.surface-list button { font-size:16px; }
+.selector-result__smell span { font-size:14px; }
+.advertising-card p { font-size:16px; }
+.article-redesign__body { max-width:1400px; }
+.article-redesign__body p { font-size:24px; }
+.article-redesign__split h2 { font-size:40px; }
+.advertising-request>form { align-items:start; }
+.advertising-request>form>img { align-self:end; }
+.advertising-request form>div { padding-top:12px; }
+.packaging-card__volume { margin-top:auto; overflow:hidden; border:1px solid #ddd; border-radius:12px; background:#fff; }
+.packaging-card__volume>div { display:grid; grid-template-columns:repeat(4,1fr); }
+.packaging-card__volume>div:first-child { background:#252525; color:#fff; }
+.packaging-card__volume b,.packaging-card__volume span { padding:11px 8px; font-size:14px; font-weight:500; text-align:center; }
+.packaging-card__volume>div+div span { border-bottom:1px solid #e3e3e3; }
+@media (max-width:760px) {
+  .hero__play { top:42%; left:72%; width:92px; height:92px; }
+  .product-documents a>span { font-size:20px; }
+  .article-redesign__body p { font-size:18px; }
+  .article-redesign__split h2 { font-size:32px; }
+}
